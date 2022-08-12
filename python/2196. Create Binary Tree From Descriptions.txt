@@ -1,0 +1,44 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        nodeCollection = dict()
+        for nodeArray in descriptions:
+            value = nodeArray[0]
+            child = nodeArray[1]
+            is_left = nodeArray[2]
+            if value not in nodeCollection: # check if the value is already in the collection
+                nodeCollection[value] = {
+                    'left_value' : None,
+                    'right_value' : None,
+                    'parent_value' : None
+                }
+            if is_left == 1: # check if the child is left or right node
+                nodeCollection[value]['left_value'] = child
+            else:
+                nodeCollection[value]['right_value'] = child
+            
+            if child not in nodeCollection: # check if the child is already in the collection
+                nodeCollection[child] = {
+                    'left_value' : None,
+                    'right_value' : None,
+                    'parent_value' : None
+                }
+            nodeCollection[child]['parent_value'] = value # set the parent value of the child
+        for value in list(nodeCollection): # Time Comp = m where m = number of unique nodes
+            if not nodeCollection[value]['parent_value']:
+                root = TreeNode(value)
+                
+        def makeBST(root, nodeCollection):
+            if nodeCollection[root.val]['left_value']:
+                root.left = TreeNode(nodeCollection[root.val]['left_value'])
+                makeBST(root.left, nodeCollection)
+            if nodeCollection[root.val]['right_value']:
+                root.right = TreeNode(nodeCollection[root.val]['right_value'])
+                makeBST(root.right, nodeCollection)
+        makeBST(root, nodeCollection)
+        return root
