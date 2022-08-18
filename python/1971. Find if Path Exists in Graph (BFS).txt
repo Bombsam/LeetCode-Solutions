@@ -1,0 +1,29 @@
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        if not edges:
+            return True
+        if source == destination:
+            return True
+        neighbors = {vertex: [] for vertex in range(n)} # define the neighbors dictionary
+        visitedNeighbors = set() # using a set will be much faster
+        for edge in edges:
+            neighbors[edge[0]].append(edge[1])
+            neighbors[edge[1]].append(edge[0])
+
+        def bfsSearch(source, destination): # the function for Breadth-First Search
+            nonlocal visitedNeighbors # needed in order to make changes to visitedNeighbors
+            visitedNeighbors.add(source)
+            for neighbor in neighbors[source]: # for each neighbor, check if it's equal to the desination
+                if neighbor not in visitedNeighbors:
+                    if neighbor == destination:
+                        return True
+            for neighbor in neighbors[source]: # now run the function for all the neighbors
+                if neighbor not in visitedNeighbors:
+                    if bfsSearch(neighbor, destination):
+                        return True
+            return False
+        
+        return bfsSearch(source, destination)
+    
+        # Time Complexity: O(E + V)
+        # Space Complexity: O(V)

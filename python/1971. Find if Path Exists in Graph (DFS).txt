@@ -1,0 +1,25 @@
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        if not edges:
+            return True
+        neighbors = {vertex: [] for vertex in range(n)} # define the neighbors dictionary
+        visitedNeighbors = set() # using a set will be much faster
+        for edge in edges:
+            neighbors[edge[0]].append(edge[1])
+            neighbors[edge[1]].append(edge[0])
+
+        def dfsSearch(source, destination): # the function for Depth-First Search
+            nonlocal visitedNeighbors # needed in order to make changes to visitedNeighbors
+            if source == destination: # The base case
+                return True
+            visitedNeighbors.add(source)
+            for neighbor in neighbors[source]: # for each neighbor, recursively check if it leads to the destination
+                if neighbor not in visitedNeighbors:
+                    if dfsSearch(neighbor, destination):
+                        return True
+            return False
+
+        return dfsSearch(source, destination)
+
+	   # Time Complexity: O(E + V)
+	   # Space Complexity: O(V)
